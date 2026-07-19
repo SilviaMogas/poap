@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>POAP Archive</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Rubik:wght@400;500;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 62.5%; }
+
+:root {
+  --primary-100: #f5f4ff;
+  --primary-200: #dddaff;
+  --primary-300: #b5aeff;
+  --primary-400: #968cff;
+  --primary-500: #7c72e2;
+  --primary-600: #5e58a5;
+  --primary-700: #473e6b;
+  --primary-800: #2f2a47;
+  --ff-thick: 'Rubik Mono One', sans-serif;
+  --ff-primary: 'Rubik', -apple-system, sans-serif;
+}
+
+body {
+  background: #fff;
+  color: var(--primary-700);
+  font-family: var(--ff-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.rings {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 0;
+  pointer-events: none;
+  width: min(160vw, 160vh);
+  height: min(160vw, 160vh);
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4.8rem 2.4rem;
+  max-width: 64rem;
+}
+
+.logo {
+  width: 8rem;
+  height: auto;
+  margin-bottom: 3.2rem;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--primary-100);
+  color: var(--primary-600);
+  font-family: var(--ff-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10rem;
+  border: 1px solid var(--primary-200);
+  margin-bottom: 2.4rem;
+}
+
+h1 {
+  font-family: var(--ff-primary);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.2;
+  color: var(--primary-700);
+  margin-bottom: 1.6rem;
+  max-width: 52rem;
+}
+
+p {
+  font-size: 1.6rem;
+  color: #797292;
+  line-height: 1.65;
+  max-width: 40rem;
+  margin-bottom: 3.6rem;
+}
+
+.download-options {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.download-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem 2.4rem;
+  border: 1px solid var(--primary-200);
+  border-radius: 1.6rem;
+  text-decoration: none;
+  background: #fff;
+  min-width: 14rem;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.download-card:hover {
+  border-color: var(--primary-400);
+  box-shadow: 0 4px 16px rgba(124, 114, 226, 0.12);
+  transform: translateY(-2px);
+}
+
+.download-card:focus-visible { outline: 3px solid var(--primary-400); outline-offset: 3px; }
+
+.download-card--primary {
+  background: var(--primary-700);
+  border-color: var(--primary-700);
+}
+
+.download-card--primary:hover {
+  border-color: var(--primary-600);
+  box-shadow: 0 4px 20px rgba(71, 62, 107, 0.25);
+}
+
+.download-card__format {
+  font-family: var(--ff-thick);
+  font-size: 1.6rem;
+  color: var(--primary-700);
+  letter-spacing: 0.04em;
+}
+
+.download-card--primary .download-card__format { color: #fff; }
+
+.download-card__desc {
+  font-size: 1.2rem;
+  color: #797292;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.download-card--primary .download-card__desc { color: rgba(255,255,255,0.7); }
+
+.kiwix { color: var(--primary-400); }
+.download-card--primary .kiwix { color: var(--primary-300); }
+
+.download-card__size {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-300);
+  letter-spacing: 0.04em;
+}
+
+.download-card--primary .download-card__size { color: rgba(255,255,255,0.5); }
+
+.download-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+
+.download-card--primary .download-card__cta { color: #fff; }
+
+.meta {
+  font-size: 1.2rem;
+  color: var(--primary-300);
+  letter-spacing: 0.04em;
+}
+
+.meta a {
+  color: var(--primary-400);
+  text-decoration: none;
+}
+
+.meta a:hover { text-decoration: underline; }
+
+.checksums {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.checksum-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.checksum-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-400);
+  white-space: nowrap;
+  min-width: 8rem;
+}
+
+.checksum-hash {
+  font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+  font-size: 1.05rem;
+  color: var(--primary-300);
+  word-break: break-all;
+  background: none;
+  padding: 0;
+}
+
+.checksum-hint {
+  font-size: 1.1rem;
+  color: var(--primary-200);
+  margin-top: 0.4rem;
+}
+
+.checksum-hint code {
+  background: none;
+  padding: 0;
+  color: var(--primary-300);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--primary-200);
+  margin: 4.8rem 0;
+  opacity: 0.5;
+}
+
+.how-to,
+.ai-prompt {
+  width: 100%;
+  text-align: left;
+}
+
+.how-to h2,
+.ai-prompt h2 {
+  font-family: var(--ff-primary);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-400);
+  margin-bottom: 2rem;
+}
+
+.how-to__sub {
+  font-family: var(--ff-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-600);
+  margin: 2.4rem 0 1.4rem;
+}
+
+.how-to__sub:first-of-type { margin-top: 0; }
+
+.how-to ol {
+  list-style: none;
+  counter-reset: steps;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.how-to ol li {
+  counter-increment: steps;
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 1.2rem;
+  font-size: 1.5rem;
+  color: var(--primary-700);
+  line-height: 1.6;
+}
+
+.how-to ol li::before {
+  content: counter(steps);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-400);
+  background: var(--primary-100);
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.how-to a {
+  color: var(--primary-500);
+  text-decoration: none;
+}
+
+.how-to a:hover { text-decoration: underline; }
+
+.how-to code,
+.prompt-block pre code {
+  font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+  font-size: 1.3rem;
+  background: var(--primary-100);
+  color: var(--primary-600);
+  padding: 0.15em 0.45em;
+  border-radius: 0.4rem;
+}
+
+.ai-intro {
+  font-size: 1.4rem;
+  color: #797292;
+  margin-bottom: 1.4rem !important;
+}
+
+.prompt-block {
+  position: relative;
+  background: var(--primary-100);
+  border: 1px solid var(--primary-200);
+  border-radius: 1.2rem;
+  overflow: hidden;
+}
+
+.prompt-block pre {
+  font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: var(--primary-700);
+  padding: 2rem 2rem 2rem 2rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: #fff;
+  border: 1px solid var(--primary-200);
+  color: var(--primary-600);
+  font-family: var(--ff-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.4rem 1rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  z-index: 1;
+}
+
+.copy-btn:hover {
+  background: var(--primary-600);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+}
+</style>
+
+<!-- RINGS BACKGROUND -->
+</head><body><svg class="rings" xmlns="http://www.w3.org/2000/svg" width="740" height="741" fill="none" viewBox="0 0 740 741" aria-hidden="true">
+  <g stroke="#DCD8FF" stroke-miterlimit="10" stroke-width="1.588" clip-rule="evenodd" opacity=".5">
+    <path d="m414.1 12.68 23.981 13.872a88.48 88.48 0 0 0 44.279 11.885h27.703c31.633 0 60.867 16.899 76.69 44.345l13.851 24.017a88.552 88.552 0 0 0 32.412 32.46l23.981 13.873c27.392 15.846 44.278 45.124 44.278 76.805v27.745a88.72 88.72 0 0 0 11.868 44.345l13.851 24.017c15.823 27.433 15.823 61.244 0 88.677l-13.851 24.018a88.815 88.815 0 0 0-11.868 44.345v27.745c0 31.68-16.873 60.958-44.278 76.805l-23.981 13.872a88.555 88.555 0 0 0-32.412 32.461l-13.851 24.017c-15.823 27.433-45.057 44.345-76.69 44.345H482.36a88.377 88.377 0 0 0-44.279 11.885L414.1 728.086a88.398 88.398 0 0 1-88.544 0l-23.981-13.872a88.477 88.477 0 0 0-44.279-11.885h-27.703c-31.633 0-60.867-16.899-76.69-44.345l-13.852-24.017a88.56 88.56 0 0 0-32.411-32.461l-23.981-13.872c-27.392-15.847-44.279-45.125-44.279-76.805v-27.745a88.718 88.718 0 0 0-11.867-44.345L12.66 414.721c-15.823-27.433-15.823-61.244 0-88.677l13.852-24.017a88.818 88.818 0 0 0 11.867-44.345v-27.745c0-31.681 16.874-60.959 44.279-76.805l23.981-13.873a88.557 88.557 0 0 0 32.411-32.46l13.852-24.017c15.823-27.433 45.057-44.345 76.69-44.345h27.703a88.385 88.385 0 0 0 44.279-11.885l23.981-13.873a88.399 88.399 0 0 1 88.544 0Z"></path>
+    <path d="m404.52 89.954 18.795 10.86a69.335 69.335 0 0 0 34.699 9.302h21.701c24.788 0 47.695 13.233 60.096 34.705l10.857 18.799a69.441 69.441 0 0 0 25.398 25.402l18.796 10.859a69.428 69.428 0 0 1 34.698 60.108v21.705a69.359 69.359 0 0 0 9.3 34.704l10.857 18.799a69.376 69.376 0 0 1 0 69.397l-10.857 18.799a69.362 69.362 0 0 0-9.3 34.705v21.705a69.426 69.426 0 0 1-34.698 60.107l-18.796 10.859a69.436 69.436 0 0 0-25.398 25.403l-10.857 18.799c-12.401 21.471-35.308 34.705-60.096 34.705h-21.701a69.325 69.325 0 0 0-34.699 9.302l-18.795 10.859a69.342 69.342 0 0 1-69.384 0l-18.796-10.859a69.318 69.318 0 0 0-34.698-9.302h-21.701c-24.788 0-47.696-13.234-60.096-34.705l-10.857-18.799a69.444 69.444 0 0 0-25.398-25.403l-18.796-10.859a69.424 69.424 0 0 1-34.698-60.107v-21.705a69.353 69.353 0 0 0-9.301-34.705l-10.857-18.799a69.377 69.377 0 0 1 0-69.397l10.857-18.799a69.35 69.35 0 0 0 9.301-34.704v-21.705a69.426 69.426 0 0 1 34.698-60.108l18.796-10.859a69.449 69.449 0 0 0 25.398-25.402l10.857-18.799c12.4-21.472 35.308-34.705 60.096-34.705h21.701a69.329 69.329 0 0 0 34.698-9.302l18.796-10.86a69.342 69.342 0 0 1 69.384 0Z" opacity=".7"></path>
+    <path d="m395.759 161.605 14.052 8.094a52.009 52.009 0 0 0 25.932 6.94h16.222c18.536 0 35.655 9.871 44.923 25.878l8.111 14.022a51.827 51.827 0 0 0 18.991 18.952l14.051 8.094c16.054 9.249 25.932 26.333 25.932 44.83v16.189a51.56 51.56 0 0 0 6.955 25.878l8.111 14.023a51.648 51.648 0 0 1 0 51.757l-8.111 14.022a51.73 51.73 0 0 0-6.955 25.878v16.189c0 18.498-9.891 35.581-25.932 44.83l-14.051 8.094a51.827 51.827 0 0 0-18.991 18.952l-8.111 14.022c-9.268 16.02-26.387 25.879-44.923 25.879h-16.222a51.838 51.838 0 0 0-25.932 6.939l-14.052 8.095a51.94 51.94 0 0 1-51.864 0l-14.051-8.095a52.008 52.008 0 0 0-25.932-6.939H287.69c-18.536 0-35.655-9.872-44.923-25.879l-8.111-14.022a51.827 51.827 0 0 0-18.991-18.952l-14.052-8.094c-16.053-9.249-25.932-26.332-25.932-44.83v-16.189c0-9.08-2.391-18.017-6.954-25.878l-8.111-14.022a51.648 51.648 0 0 1 0-51.757l8.111-14.023a51.727 51.727 0 0 0 6.954-25.878v-16.189c0-18.497 9.892-35.581 25.932-44.83l14.052-8.094a51.827 51.827 0 0 0 18.991-18.952l8.111-14.022c9.268-16.02 26.387-25.878 44.923-25.878h16.222a51.84 51.84 0 0 0 25.932-6.94l14.051-8.094a51.94 51.94 0 0 1 51.864 0Z" opacity=".5"></path>
+  </g>
+</svg>
+
+<main>
+  <!-- POAP logo -->
+  <svg class="logo" xmlns="http://www.w3.org/2000/svg" width="101" height="112" fill="none" viewBox="0 0 101 112" aria-label="POAP">
+    <path fill="#fff" stroke="#473E6B" stroke-linejoin="round" stroke-width=".568" d="M3.512 3.532c.229-.219.686-3.272 1.1-3.248.416.024.78 3.053.973 3.255.391.4 3.242.683 3.222 1.072-.025.386-2.827.57-3.222.95-.221.211-.685 3.275-1.1 3.247-.415-.024-.772-3.043-.973-3.25C3.135 5.17.26 4.87.284 4.48c.024-.389 2.848-.584 3.232-.949h-.004Z"></path>
+    <path fill="#DAB8E7" stroke="#473E6B" stroke-linejoin="round" stroke-width=".568" d="M17.56 7.564c.138-.143.413-2.181.661-2.166.249.018.466 2.037.584 2.17.235.268 1.945.456 1.931.713-.013.258-1.693.379-1.931.633-.134.14-.413 2.181-.66 2.166-.249-.014-.463-2.03-.584-2.166-.225-.258-1.952-.456-1.938-.717.013-.262 1.71-.39 1.938-.633Z"></path>
+    <path fill="#CCE0BB" stroke="#473E6B" stroke-linejoin="round" stroke-width=".568" d="M84.608 108.504c.137-.13.412-1.963.66-1.95.248.016.466 1.834.584 1.953.234.242 1.944.41 1.931.642-.013.232-1.693.341-1.931.569-.134.126-.413 1.963-.66 1.95-.249-.013-.463-1.827-.584-1.95-.225-.231-1.952-.41-1.938-.645.013-.235 1.71-.351 1.938-.569Z"></path>
+    <path fill="#B8D4E2" stroke="#473E6B" stroke-linejoin="round" stroke-width=".568" d="M94.99 99.003c.23-.218.687-3.27 1.102-3.246.415.024.778 3.052.971 3.253.391.4 3.245.684 3.22 1.073-.025.389-2.826.57-3.22.948-.221.212-.686 3.274-1.101 3.25-.415-.024-.77-3.042-.971-3.25-.377-.385-3.251-.684-3.23-1.073.024-.389 2.85-.583 3.23-.951v-.004Z"></path>
+    <path fill="#8580FF" stroke="#473E6B" stroke-width=".568" d="M9.658 14.775a1.705 1.705 0 1 0 0 3.411 1.705 1.705 0 0 0 0-3.41Z"></path>
+    <path fill="#fff" d="M5.905 111.393a1.429 1.429 0 1 0-.002-2.857 1.429 1.429 0 0 0 .002 2.857Z"></path>
+    <g filter="url(#a)" opacity=".7">
+      <path fill="url(#b)" fill-rule="evenodd" d="m83.407 43.672-1.255-2.181a7.268 7.268 0 0 1-.972-3.621v-2.51a8.857 8.857 0 0 0-4.42-7.652l-2.169-1.256a7.2 7.2 0 0 1-2.648-2.648l-1.255-2.182a8.89 8.89 0 0 0-7.65-4.42h-2.521a7.265 7.265 0 0 1-3.62-.972l-2.182-1.255a8.837 8.837 0 0 0-8.836 0L43.71 16.23a7.264 7.264 0 0 1-3.62.972h-2.51a8.837 8.837 0 0 0-7.65 4.42l-1.255 2.182a7.2 7.2 0 0 1-2.649 2.648l-2.18 1.255a8.881 8.881 0 0 0-4.42 7.652v2.51c0 1.276-.34 2.522-.972 3.621l-1.255 2.182a8.84 8.84 0 0 0 0 8.837l1.255 2.17c.632 1.1.972 2.346.972 3.621v2.51a8.857 8.857 0 0 0 4.42 7.652l2.169 1.267a7.198 7.198 0 0 1 2.648 2.648l1.255 2.182a8.86 8.86 0 0 0 2.015 2.385l-5.456 14.998c-.254.681.106 1.44.787 1.694.332.115.692.107 1.013-.038l8.146-3.797c.66-.303 1.44-.02 1.751.644l3.797 8.136c.311.661 1.09.944 1.75.644.32-.147.566-.419.681-.75l5.847-16.091h.173l5.866 16.093a1.32 1.32 0 0 0 2.431.099l3.797-8.148a1.326 1.326 0 0 1 1.75-.644l8.136 3.785a1.31 1.31 0 0 0 1.75-.643 1.3 1.3 0 0 0 .038-1.013L68.73 76.9a8.857 8.857 0 0 0 1.964-2.343l1.255-2.181a7.244 7.244 0 0 1 2.657-2.65l2.18-1.254a8.877 8.877 0 0 0 4.42-7.66V58.3c0-1.276.34-2.523.972-3.622l1.255-2.181a8.91 8.91 0 0 0-.029-8.83l.003.004Z" clip-rule="evenodd"></path>
+    </g>
+    <path fill="#E8C7F6" d="M35.515 87.844a3.466 3.466 0 0 1 1.656-.32c1.283.07 2.431.877 3.017 2.12l2.89 6.201L48.082 82.1a8.511 8.511 0 0 1-2.19-.894l-2.18-1.256a7.264 7.264 0 0 0-3.621-.972h-2.51c-1.304 0-2.599-.291-3.776-.857l-4.613 12.675 6.327-2.949-.003-.002Z"></path>
+    <path fill="#E8C7F6" d="M43.493 96.547a.398.398 0 0 1-.38.271h-.02a.425.425 0 0 1-.382-.242l-3.115-6.668c-.476-1.022-1.422-1.694-2.472-1.752a2.826 2.826 0 0 0-1.353.263l-6.794 3.162a.425.425 0 0 1-.565-.205.398.398 0 0 1-.009-.32l4.818-13.238a8.248 8.248 0 0 1-1.284-.885l-5.461 15.009c-.254.68.107 1.44.788 1.694.331.115.692.106 1.012-.038l8.147-3.797c.66-.303 1.44-.02 1.75.643l3.797 8.137c.312.66 1.09.943 1.751.643.32-.147.566-.418.68-.75l5.851-16.1c-.525 0-1.041-.049-1.558-.147l-5.207 14.32h.006Z"></path>
+    <path fill="#fff" d="M28.527 91.516a.417.417 0 0 0 .467.069l6.794-3.162a2.827 2.827 0 0 1 1.353-.263c1.041.058 1.996.73 2.472 1.752l3.116 6.667c.07.148.213.243.38.243h.02a.425.425 0 0 0 .382-.272l5.198-14.32c-.214-.037-.418-.086-.632-.135l-5.002 13.746-2.89-6.2c-.575-1.236-1.734-2.044-3.018-2.121a3.471 3.471 0 0 0-1.656.32l-6.317 2.94 4.612-12.675c-.193-.098-.39-.193-.574-.291L28.415 91.05a.441.441 0 0 0 .115.468l-.003-.003Z"></path>
+    <path fill="#E8C7F6" d="M60.575 89.518c.213-.459.525-.865.914-1.189.05-.037.099-.077.148-.115 1.02-.77 2.431-.894 3.669-.32l6.2 2.882-4.634-12.704a8.824 8.824 0 0 1-3.854.886h-2.51c-1.275 0-2.52.34-3.62.972l-2.18 1.255c-.661.381-1.374.681-2.112.878l5.022 13.774 2.96-6.319h-.003Z"></path>
+    <path fill="#E8C7F6" d="M72.292 91.048a.425.425 0 0 1-.254.545.468.468 0 0 1-.32-.009l-6.675-3.104c-1.021-.476-2.181-.381-3.018.242-.037.029-.086.07-.127.098-.32.263-.574.595-.75.972l-3.161 6.795a.417.417 0 0 1-.381.243h-.02a.425.425 0 0 1-.381-.272l-5.227-14.337a8.316 8.316 0 0 1-1.558.156l5.867 16.1a1.32 1.32 0 0 0 2.432.098l3.797-8.148a1.327 1.327 0 0 1 1.75-.643l8.136 3.785a1.31 1.31 0 0 0 1.75-.643 1.3 1.3 0 0 0 .038-1.013l-5.47-15.038a8.51 8.51 0 0 1-1.283.906l4.847 13.267h.008Z"></path>
+    <path fill="#fff" d="M57.586 96.83h.02a.425.425 0 0 0 .38-.242l3.162-6.794a2.7 2.7 0 0 1 .75-.973c.038-.028.078-.069.127-.098.837-.632 1.997-.721 3.018-.242l6.675 3.105a.425.425 0 0 0 .565-.205.4.4 0 0 0 .01-.32l-4.839-13.279c-.184.107-.38.205-.574.303l4.633 12.704-6.2-2.882c-1.234-.575-2.647-.46-3.669.32-.049.037-.098.078-.147.115-.39.32-.7.73-.914 1.19l-2.948 6.318-5.023-13.774a7.463 7.463 0 0 1-.632.147l5.228 14.337a.432.432 0 0 0 .38.27h-.002ZM82.025 51.712a7.29 7.29 0 0 0 0-7.242l-1.255-2.181a8.799 8.799 0 0 1-1.188-4.42v-2.511a7.244 7.244 0 0 0-3.62-6.27l-2.181-1.255a8.854 8.854 0 0 1-3.231-3.231l-1.255-2.182a7.256 7.256 0 0 0-6.269-3.62h-2.51a8.826 8.826 0 0 1-4.419-1.19l-2.18-1.255a7.287 7.287 0 0 0-7.242 0l-2.169 1.256a8.818 8.818 0 0 1-4.42 1.188h-2.509a7.242 7.242 0 0 0-6.268 3.621l-1.255 2.182a8.768 8.768 0 0 1-3.231 3.231l-2.181 1.255a7.259 7.259 0 0 0-3.62 6.27v2.51a8.83 8.83 0 0 1-1.19 4.42l-1.254 2.182a7.29 7.29 0 0 0 0 7.242l1.255 2.181a8.8 8.8 0 0 1 1.188 4.42v2.502a7.244 7.244 0 0 0 3.62 6.27l2.182 1.255a8.768 8.768 0 0 1 3.23 3.231l1.255 2.182a7.256 7.256 0 0 0 6.269 3.62h2.51c1.546 0 3.075.41 4.42 1.19l2.18 1.254a7.287 7.287 0 0 0 7.24 0l2.17-1.255a8.794 8.794 0 0 1 4.42-1.188h2.51a7.242 7.242 0 0 0 6.268-3.621l1.255-2.182a8.768 8.768 0 0 1 3.23-3.231l2.182-1.255a7.254 7.254 0 0 0 3.62-6.27v-2.51a8.83 8.83 0 0 1 1.189-4.42l1.254-2.17v-.003Zm-30.52 3.474 3.883-12.675a.913.913 0 0 1 .175-.32.486.486 0 0 1 .35-.128h1.07a.465.465 0 0 1 .349.127.876.876 0 0 1 .176.32l3.874 12.676c.02.069.029.147.029.225a.45.45 0 0 1-.098.291.305.305 0 0 1-.242.127h-.788a.328.328 0 0 1-.291-.127.975.975 0 0 1-.116-.225l-.77-2.472a.415.415 0 0 0-.398-.292H54.21a.414.414 0 0 0-.398.291l-.77 2.473a.524.524 0 0 1-.116.225.367.367 0 0 1-.303.127h-.8a.3.3 0 0 1-.241-.127.45.45 0 0 1-.099-.291c.01-.087.02-.156.02-.225ZM40.459 47.71l3.358-5.47a.902.902 0 0 1 1.537 0l3.367 5.479c.332.545.34 1.226.029 1.771l-3.338 5.84a.894.894 0 0 1-1.558.012l-3.415-5.84a1.718 1.718 0 0 1 .02-1.792Zm-9.286 2.755a.36.36 0 0 0-.36.361v4.516a.527.527 0 0 1-.107.34.37.37 0 0 1-.292.136h-.828a.337.337 0 0 1-.282-.136.575.575 0 0 1-.098-.34V43.339c0-.71.573-1.284 1.283-1.284h3.084c.779 0 1.46.156 2.025.476.574.32 1.041.816 1.333 1.41.311.624.476 1.403.476 2.338s-.156 1.714-.476 2.325a3.257 3.257 0 0 1-1.333 1.403c-.574.311-1.255.476-2.025.476l-2.403-.02.003.002Zm41.157-1.87a3.258 3.258 0 0 1-1.333 1.403c-.574.312-1.255.476-2.025.476h-2.394a.36.36 0 0 0-.361.36v4.516a.528.528 0 0 1-.107.34.37.37 0 0 1-.291.136h-.828a.366.366 0 0 1-.291-.135.521.521 0 0 1-.099-.34V43.338c0-.71.575-1.276 1.275-1.284h3.084c.78 0 1.46.156 2.025.476.575.32 1.042.816 1.333 1.41.312.624.468 1.403.468 2.338s-.148 1.702-.46 2.317h.004Z"></path>
+    <path fill="#fff" d="M66.58 48.772h2.317c.758 0 1.344-.213 1.722-.643.378-.43.574-1.05.574-1.87 0-.82-.185-1.431-.554-1.858-.37-.427-.955-.66-1.734-.66h-2.308a.368.368 0 0 0-.369.369v4.273c-.02.225.147.39.35.39h.002ZM33.48 43.749h-2.316a.368.368 0 0 0-.37.37v4.273c0 .204.165.369.37.369h2.317c.758 0 1.344-.214 1.722-.644.378-.43.574-1.05.574-1.858s-.185-1.43-.554-1.858c-.37-.427-.955-.652-1.742-.652ZM54.58 50.974h3.748a.16.16 0 0 0 .127-.057.141.141 0 0 0 .02-.136l-1.87-6.163c-.028-.078-.115-.127-.193-.098a.165.165 0 0 0-.098.098l-1.878 6.163a.155.155 0 0 0 .107.185c.009 0 .029 0 .037.008Z"></path>
+    <path fill="#5E58A3" d="m83.407 43.672-1.255-2.181a7.268 7.268 0 0 1-.972-3.621v-2.51a8.857 8.857 0 0 0-4.42-7.652l-2.169-1.256a7.2 7.2 0 0 1-2.648-2.648l-1.255-2.182a8.89 8.89 0 0 0-7.65-4.42h-2.521a7.265 7.265 0 0 1-3.62-.972l-2.182-1.255a8.837 8.837 0 0 0-8.836 0L43.71 16.23a7.264 7.264 0 0 1-3.62.972h-2.51a8.837 8.837 0 0 0-7.65 4.42l-1.255 2.182a7.2 7.2 0 0 1-2.649 2.648l-2.18 1.255a8.881 8.881 0 0 0-4.42 7.652v2.51c0 1.276-.34 2.522-.972 3.621l-1.255 2.182a8.84 8.84 0 0 0 0 8.837l1.255 2.17c.632 1.1.972 2.346.972 3.621v2.51a8.857 8.857 0 0 0 4.42 7.652l2.169 1.267a7.198 7.198 0 0 1 2.648 2.648l1.255 2.182a8.867 8.867 0 0 0 3.3 3.272c.185.106.38.205.574.291a8.733 8.733 0 0 0 3.776.857h2.51c1.275 0 2.521.34 3.62.972l2.181 1.256c.681.398 1.422.7 2.19.894.205.058.418.098.632.136a8.306 8.306 0 0 0 1.557.147h.165a9.113 9.113 0 0 0 1.558-.156 6.24 6.24 0 0 0 .631-.147 8.617 8.617 0 0 0 2.112-.877l2.18-1.255a7.264 7.264 0 0 1 3.621-.973h2.51a8.851 8.851 0 0 0 3.854-.886c.193-.098.39-.193.574-.303a8.853 8.853 0 0 0 3.231-3.231l1.255-2.181a7.244 7.244 0 0 1 2.657-2.65l2.18-1.254a8.877 8.877 0 0 0 4.42-7.66V58.3c0-1.276.34-2.523.972-3.622l1.255-2.181a8.91 8.91 0 0 0-.029-8.83l.003.004Zm-3.825 17.141a7.244 7.244 0 0 1-3.62 6.27l-2.181 1.255a8.854 8.854 0 0 0-3.231 3.232l-1.255 2.18a7.257 7.257 0 0 1-6.269 3.622h-2.51c-1.546 0-3.075.41-4.419 1.189l-2.18 1.255a7.287 7.287 0 0 1-7.242 0l-2.18-1.255a8.819 8.819 0 0 0-4.42-1.189h-2.51a7.242 7.242 0 0 1-6.268-3.621l-1.255-2.181a8.767 8.767 0 0 0-3.23-3.232l-2.182-1.255a7.273 7.273 0 0 1-3.62-6.27v-2.51a8.83 8.83 0 0 0-1.189-4.42l-1.255-2.181a7.29 7.29 0 0 1 0-7.242l1.255-2.182a8.799 8.799 0 0 0 1.189-4.42v-2.51a7.244 7.244 0 0 1 3.62-6.27l2.181-1.255a8.767 8.767 0 0 0 3.231-3.232l1.255-2.18a7.257 7.257 0 0 1 6.268-3.622h2.51c1.546 0 3.075-.41 4.42-1.189l2.18-1.255a7.287 7.287 0 0 1 7.241 0l2.17 1.255a8.819 8.819 0 0 0 4.42 1.19h2.509a7.242 7.242 0 0 1 6.268 3.62l1.255 2.181a8.767 8.767 0 0 0 3.231 3.232l2.181 1.255a7.258 7.258 0 0 1 3.62 6.27v2.51c0 1.546.41 3.076 1.189 4.42l1.255 2.181a7.29 7.29 0 0 1 0 7.242l-1.255 2.182a8.8 8.8 0 0 0-1.189 4.42v2.51h.012Z"></path>
+    <path fill="#5E58A3" d="M35.592 49.998a3.242 3.242 0 0 0 1.333-1.402c.311-.615.476-1.391.476-2.326s-.156-1.714-.476-2.337a3.262 3.262 0 0 0-1.333-1.411c-.574-.312-1.255-.476-2.025-.476h-3.084c-.71 0-1.284.574-1.284 1.284V55.34a.6.6 0 0 0 .098.34c.07.087.176.148.283.136h.828c.115 0 .225-.049.291-.135a.527.527 0 0 0 .107-.34v-4.516a.36.36 0 0 1 .36-.36h2.395c.779 0 1.46-.157 2.034-.468h-.003Zm.193-3.728c0 .808-.193 1.44-.574 1.87-.38.43-.963.643-1.722.643h-2.317a.368.368 0 0 1-.369-.37v-4.272c0-.205.165-.37.37-.37h2.316c.779 0 1.361.225 1.734.661.372.436.553 1.042.565 1.84l-.003-.002ZM51.833 55.82h.799a.362.362 0 0 0 .303-.127.432.432 0 0 0 .115-.225l.77-2.473a.407.407 0 0 1 .398-.292h4.486c.185 0 .34.116.398.292l.77 2.473a1.1 1.1 0 0 0 .116.224c.07.087.176.136.291.127h.8a.3.3 0 0 0 .242-.127.45.45 0 0 0 .098-.29.86.86 0 0 0-.029-.226l-3.863-12.675a.995.995 0 0 0-.176-.32.486.486 0 0 0-.349-.127h-1.07a.466.466 0 0 0-.35.127.877.877 0 0 0-.175.32l-3.883 12.675c-.009.07-.009.147-.02.214a.45.45 0 0 0 .098.291.263.263 0 0 0 .234.136l-.003.002Zm2.599-5.053 1.878-6.163c.029-.078.115-.127.193-.098.05.02.078.05.098.098l1.87 6.163c.008.05 0 .098-.02.136a.16.16 0 0 1-.127.058h-3.748a.155.155 0 0 1-.156-.156c0-.009.009-.02.009-.038h.003ZM43.845 55.342a.894.894 0 0 0 1.558-.012l3.337-5.839a1.747 1.747 0 0 0-.029-1.772l-3.366-5.479a.902.902 0 0 0-1.538 0l-3.358 5.47a1.744 1.744 0 0 0-.02 1.793l3.416 5.84Zm.972-10.744 2.432 3.952a.29.29 0 0 1 0 .283l-2.403 4.204a.274.274 0 0 1-.381.098.246.246 0 0 1-.098-.098l-2.464-4.204a.29.29 0 0 1 0-.283l2.432-3.952a.28.28 0 0 1 .38-.087c.05.02.079.05.099.087h.003Z"></path>
+    <path fill="#fff" d="M44.351 44.597 41.92 48.55a.29.29 0 0 0 0 .283l2.463 4.203a.274.274 0 0 0 .381.099.246.246 0 0 0 .098-.099l2.403-4.203a.29.29 0 0 0 0-.283l-2.432-3.953c-.078-.127-.254-.176-.38-.087a.183.183 0 0 0-.099.087h-.003Z"></path>
+    <path fill="#5E58A3" d="M70.997 42.534c-.574-.312-1.254-.476-2.025-.476h-3.084c-.71 0-1.283.574-1.283 1.284v12.002a.54.54 0 0 0 .098.34c.07.087.176.148.291.136h.828a.366.366 0 0 0 .291-.135.527.527 0 0 0 .107-.34v-4.516a.36.36 0 0 1 .36-.36h2.395c.779 0 1.46-.157 2.025-.477a3.242 3.242 0 0 0 1.333-1.402c.312-.615.467-1.39.467-2.326 0-.934-.155-1.714-.467-2.337A3.278 3.278 0 0 0 71 42.537l-.003-.003Zm-4.788 1.595c0-.205.164-.37.369-.37h2.316c.78 0 1.362.226 1.734.662.372.435.554 1.062.554 1.858s-.193 1.44-.574 1.87c-.38.43-.955.643-1.722.643h-2.308a.368.368 0 0 1-.37-.37V44.13Z"></path>
+    <path fill="#2F2A47" d="M50.297 13.67a8.85 8.85 0 0 1 4.42 1.184l2.18 1.255c1.1.632 2.346.972 3.62.972h2.522a8.884 8.884 0 0 1 7.65 4.42l1.255 2.182a7.2 7.2 0 0 0 2.648 2.648l2.17 1.256a8.863 8.863 0 0 1 4.419 7.651v2.51c0 1.276.34 2.522.972 3.622l1.255 2.18a8.896 8.896 0 0 1 .029 8.83l-1.255 2.181a7.268 7.268 0 0 0-.972 3.621v2.51a8.87 8.87 0 0 1-4.42 7.66l-2.18 1.256a7.2 7.2 0 0 0-2.657 2.648l-1.255 2.182a8.888 8.888 0 0 1-1.959 2.337l5.464 15.02a1.3 1.3 0 0 1-.04 1.013 1.311 1.311 0 0 1-1.752.644l-8.135-3.786a1.324 1.324 0 0 0-1.754.643l-3.796 8.149c-.147.32-.418.565-.738.68-.15.056-.306.084-.456.084a1.322 1.322 0 0 1-1.238-.86l-5.864-16.09h-.171l-5.844 16.09a1.302 1.302 0 0 1-1.235.872c-.496 0-.972-.28-1.2-.765l-3.796-8.136a1.326 1.326 0 0 0-1.754-.644l-8.147 3.797a1.34 1.34 0 0 1-1.013.037 1.324 1.324 0 0 1-.787-1.693l5.455-14.997a8.825 8.825 0 0 1-2.02-2.387l-1.254-2.18a7.198 7.198 0 0 0-2.648-2.65l-2.17-1.266a8.863 8.863 0 0 1-4.419-7.652v-2.51c0-1.276-.34-2.522-.972-3.621l-1.255-2.17a8.842 8.842 0 0 1 0-8.838l1.255-2.18c.632-1.1.972-2.347.972-3.622v-2.51a8.875 8.875 0 0 1 4.42-7.652l2.18-1.255a7.2 7.2 0 0 0 2.649-2.649l1.254-2.181a8.836 8.836 0 0 1 7.65-4.42h2.51c1.276 0 2.522-.34 3.62-.973l2.17-1.255a8.85 8.85 0 0 1 4.42-1.183m-.003-1.162c-1.751 0-3.48.461-4.994 1.335l-2.172 1.256a6.124 6.124 0 0 1-3.043.819h-2.51a10.013 10.013 0 0 0-8.649 4.997l-1.254 2.182a6.041 6.041 0 0 1-2.222 2.224l-2.18 1.255a10.054 10.054 0 0 0-4.997 8.648v2.515a6.133 6.133 0 0 1-.82 3.047l-1.254 2.182a10.03 10.03 0 0 0 0 9.991l1.255 2.173c.533.929.819 1.982.819 3.044v2.51c.012 3.566 1.924 6.882 4.996 8.65l2.167 1.264a6.056 6.056 0 0 1 2.227 2.225l1.255 2.18a9.91 9.91 0 0 0 1.67 2.148l-5.19 14.267a2.44 2.44 0 0 0 .084 1.893c.28.594.773 1.05 1.388 1.278h.008l.009.006c.274.095.56.144.845.144.358 0 .704-.075 1.027-.222l8.155-3.8a.153.153 0 0 1 .067-.011c.026 0 .112.005.155.1l3.794 8.134a2.493 2.493 0 0 0 2.244 1.428 2.45 2.45 0 0 0 2.322-1.638l4.847-13.34 4.867 13.348a2.484 2.484 0 0 0 2.322 1.619c.294 0 .582-.052.857-.156a2.466 2.466 0 0 0 1.387-1.284l3.79-8.136a.165.165 0 0 1 .153-.096c.026 0 .05.006.075.018l8.13 3.782c.326.153.678.234 1.044.234a2.47 2.47 0 0 0 2.244-1.443 2.452 2.452 0 0 0 .072-1.892l-5.195-14.288a10.018 10.018 0 0 0 1.61-2.086l1.258-2.185a6.071 6.071 0 0 1 2.232-2.224l2.181-1.255A10.075 10.075 0 0 0 82.37 60.7v-2.516c0-1.059.283-2.112.82-3.047l1.255-2.178a10.087 10.087 0 0 0-.03-9.98l-1.254-2.182a6.113 6.113 0 0 1-.82-3.044v-2.51c-.01-3.566-1.923-6.881-4.996-8.65l-2.169-1.255a6.049 6.049 0 0 1-2.224-2.225l-1.255-2.181a10.08 10.08 0 0 0-8.646-4.997h-2.524a6.129 6.129 0 0 1-3.046-.82l-2.178-1.255a10.012 10.012 0 0 0-4.994-1.336l-.011-.008Z" opacity=".14"></path>
+    <defs>
+      <linearGradient id="b" x1="75.592" x2="30.84" y1="47.364" y2="77.037" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#EAC9F8"></stop>
+        <stop offset="1" stop-color="#7C72E2"></stop>
+      </linearGradient>
+      <filter id="a" width="80.09" height="97.069" x="10.258" y="8.033" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+        <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+        <feGaussianBlur result="effect1_foregroundBlur_11181_68158" stdDeviation="2.879"></feGaussianBlur>
+      </filter>
+    </defs>
+  </svg>
+
+  <span class="badge">July 2026</span>
+
+  <h1>A self-contained snapshot of POAP</h1>
+
+  <p>Every drop and its artwork, packaged as an open SQLite database and WebP images.</p>
+
+  <div class="download-options">
+    <a class="download-card download-card--primary" href="https://downloads.poaparchive.com/archive.zip" download="">
+      <div class="download-card__format">ZIP</div>
+      <div class="download-card__desc">SQLite + WebP artworks</div>
+      <div class="download-card__size">15 GB</div>
+      <div class="download-card__cta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download
+      </div>
+    </a>
+    <a class="download-card" href="https://downloads.poaparchive.com/archive.zim" download="">
+      <div class="download-card__format">ZIM</div>
+      <div class="download-card__desc">Offline browsing via <span class="kiwix">Kiwix</span></div>
+      <div class="download-card__size">15 GB</div>
+      <div class="download-card__cta">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download
+      </div>
+    </a>
+  </div>
+
+  <div class="checksums">
+    <div class="checksum-row">
+      <span class="checksum-label">archive.zip</span>
+      <code class="checksum-hash" title="SHA-256">046850de3bd4b3c6aa75c33c4a1a589b4ab176aacdd5986c1a824df803c07633</code>
+    </div>
+    <div class="checksum-row">
+      <span class="checksum-label">archive.zim</span>
+      <code class="checksum-hash" title="SHA-256">da90f9051676e8b72f53debec68ae949319f0bed7a26306102b52f2f612ab8eb</code>
+    </div>
+    <span class="checksum-hint">SHA-256 · verify with <code>sha256sum -c</code></span>
+  </div>
+
+  <div class="divider"></div>
+
+  <section class="how-to">
+    <h2>How to use</h2>
+
+    <h3 class="how-to__sub">ZIP — SQLite + artworks</h3>
+    <ol>
+      <li><span>Unzip the archive — you'll get <code>poap.sqlite</code> and an <code>artwork/</code> folder.</span></li>
+      <li><span>Open <code>poap.sqlite</code> with any SQLite client — <a href="https://sqlitebrowser.org" target="_blank" rel="noopener">DB Browser</a>, DBeaver, or just <code>sqlite3</code> in a terminal.</span></li>
+      <li><span>Each drop's artwork is at <code>artwork/{drop_id}.webp</code>. Animated drops are animated WebP.</span></li>
+    </ol>
+
+    <h3 class="how-to__sub">ZIM — offline browser</h3>
+    <ol>
+      <li><span>Install <a href="https://kiwix.org/en/applications/" target="_blank" rel="noopener">Kiwix</a> — available for desktop and mobile.</span></li>
+      <li><span>Open <code>archive.zim</code> directly in Kiwix. The full archive is browsable without any server or internet connection.</span></li>
+    </ol>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="ai-prompt">
+    <h2>Build a frontend with AI</h2>
+    <p class="ai-intro">Paste this into Claude, ChatGPT, or any coding assistant:</p>
+    <div class="prompt-block">
+      <button class="copy-btn" onclick="copyPrompt(this)" aria-label="Copy prompt">Copy</button>
+      <pre id="ai-prompt-text">I have a local POAP archive with this structure:
+
+poap.sqlite — SQLite database with the following tables:
+
+drops (drop_id INTEGER PRIMARY KEY, fancy_id TEXT, title TEXT,
+  description TEXT, start_date TEXT, end_date TEXT, city TEXT,
+  country TEXT, event_url TEXT, year INTEGER, is_virtual INTEGER,
+  is_private INTEGER, channel TEXT, platform TEXT,
+  location_type TEXT, timezone TEXT, created_at TEXT)
+
+tokens (source_uid TEXT PRIMARY KEY, poap_id INTEGER, drop_id INTEGER,
+  minted_on INTEGER, owner_address TEXT, network TEXT,
+  transfer_count INTEGER)
+
+email_reservation_stats (drop_id INTEGER PRIMARY KEY,
+  email_reservations_total INTEGER, email_reservations_minted INTEGER,
+  email_reservations_unminted INTEGER)
+
+snapshot_metadata (key TEXT PRIMARY KEY, value TEXT)
+  -- keys: schema_version, snapshot_at, generated_at,
+  --       drops_count, tokens_count, email_reservation_stats_count
+
+artwork/ — WebP images named {drop_id}.webp
+  Static images are standard WebP.
+  Animated drops are animated WebP (multi-frame).
+
+Build a single-file HTML app that:
+- Loads poap.sqlite using sql.js (local copy or jsDelivr)
+- Shows a responsive grid of drops with artwork thumbnails
+- Supports live search by title, city, or country
+- Clicking a card opens a modal with full drop details and artwork
+- Works entirely offline after the first load
+
+Keep it self-contained in one HTML file. Use vanilla JS, no frameworks.</pre>
+    </div>
+  </section>
+</main>
+
+<script>
+function copyPrompt(btn) {
+  const text = document.getElementById('ai-prompt-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  });
+}
+</script>
+</body></html>
